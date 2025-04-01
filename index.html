@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>petproject030</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #2C3E50;
+            --secondary-color: #E74C3C;
+            --accent-color: #3498DB;
+            --light-color: #ECF0F1;
+            --dark-color: #2C3E50;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-main);
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: var(--light-color);
+            overflow-x: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        
+        nav {
+            background-color: var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: white;
+            background: none;
+            border: none;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 30%;
+            height: 3px;
+            background-color: var(--secondary-color);
+            bottom: -5px;
+            left: 0;
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-image {
+            height: 200px;
+            background-color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        
+        .interactive-demo {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .demo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .demo-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        
+        .theme-toggle {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .demo-content {
+            position: relative;
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 5px;
+            font-family: monospace;
+            line-height: 1.8;
+        }
+        
+        .annotation-text {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .annotation-popup {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            width: max-content;
+            max-width: 300px;
+            display: none;
+            z-index: 10;
+        }
+        
+        .annotation-popup::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: var(--primary-color) transparent transparent transparent;
+        }
+        
+        .annotation-text:hover .annotation-popup {
+            display: block;
+        }
+        
+        .tooltip {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+            border-bottom: 1px dotted var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        .tooltip-text {
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            width: max-content;
+            max-width: 300px;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 10;
+        }
+        
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            background-color: white;
+            padding: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            background-color: #f8f9fa;
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        
+        .faq-answer.active {
+            padding: 1rem;
+            max-height: 500px;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+            padding: 0 2rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 99;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        /* Dark theme */
+        body.dark-theme {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+        }
+        
+        body.dark-theme .card,
+        body.dark-theme .interactive-demo,
+        body.dark-theme .faq-question {
+            background-color: #2d2d2d;
+            color: #f0f0f0;
+        }
+        
+        body.dark-theme .demo-content,
+        body.dark-theme .faq-answer {
+            background-color: #3d3d3d;
+            color: #f0f0f0;
+        }
+        
+        body.dark-theme .section-title {
+            color: var(--accent-color);
+        }
+        
+        body.dark-theme .card-title {
+            color: var(--accent-color);
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 70%;
+                height: calc(100% - 60px);
+                background-color: var(--primary-color);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 2rem;
+                transition: right 0.3s ease;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links li {
+                margin: 1rem 0;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="particles" id="particles"></div>
+        <div class="header-content">
+            <h1>Semantic Annotation</h1>
+            <p class="tagline">Enhancing the meaning of digital content through structured metadata</p>
+        </div>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">Semantic<span style="color: var(--secondary-color)">Annotation</span></a>
+            <ul class="nav-links">
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#types">Types</a></li>
+                <li><a href="#demo">Demo</a></li>
+                <li><a href="#applications">Applications</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+            <button class="hamburger">☰</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <section id="introduction" class="section">
+            <h2 class="section-title">What is Semantic Annotation?</h2>
+            <p>Semantic annotation is the process of attaching additional information (metadata) to content such as documents, images, or web pages. This metadata explains the meaning of the content in a way that is machine-readable, enabling computers to understand and process information more like humans do.</p>
+            <p>Unlike simple tagging, semantic annotation creates relationships and context by linking data to defined ontologies and knowledge bases, making it a fundamental component of the Semantic Web and artificial intelligence systems.</p>
+        </section>
+        
+        <section id="types" class="section">
+            <h2 class="section-title">Types of Semantic Annotation</h2>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-image" style="background-color: #3498DB;">
+                        <i>E</i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Entity Annotation</h3>
+                        <p>Identifies and links named entities (people, places, organizations) to knowledge bases like Wikipedia or domain-specific ontologies.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image" style="background-color: #2ECC71;">
+                        <i>C</i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Concept Annotation</h3>
+                        <p>Tags abstract concepts and ideas present in the content, establishing relationships between different conceptual elements.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image" style="background-color: #E74C3C;">
+                        <i>R</i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Relationship Annotation</h3>
+                        <p>Defines the connections and interactions between entities and concepts, creating a semantic network of information.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="demo" class="section">
+            <h2 class="section-title">Interactive Demo</h2>
+            <div class="interactive-demo">
+                <div class="demo-header">
+                    <h3 class="demo-title">Semantic Annotation Example</h3>
+                    <button class="theme-toggle">Toggle Theme</button>
+                </div>
+                <div class="demo-content">
+                    <p>
+                        <span class="annotation-text" data-type="person">Tim Berners-Lee
+                            <span class="annotation-popup">Person: Inventor of the World Wide Web and director of the W3C</span>
+                        </span> 
+                        proposed the 
+                        <span class="annotation-text" data-type="concept">Semantic Web
+                            <span class="annotation-popup">Concept: An extension of the Web that provides a common framework for data sharing across applications</span>
+                        </span> 
+                        while working at 
+                        <span class="annotation-text" data-type="organization">CERN
+                            <span class="annotation-popup">Organization: European Organization for Nuclear Research</span>
+                        </span> 
+                        in 
+                        <span class="annotation-text" data-type="location">Geneva, Switzerland
+                            <span class="annotation-popup">Location: City in Switzerland, home to many international organizations</span>
+                        </span>.
+                    </p>
+                    <p>
+                        The idea was to create a web of 
+                        <span class="annotation-text" data-type="data">linked data
+                            <span class="annotation-popup">Data: Structured data interlinked with other data to become more useful</span>
+                        </span> 
+                        that could be processed by machines, enabling new capabilities and automating many tasks across the internet.
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="applications" class="section">
+            <h2 class="section-title">Applications</h2>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-image" style="background-color: #9B59B6;">
+                        <i>S</i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Search Enhancement</h3>
+                        <p>Semantic annotation improves search engine results by understanding the context and meaning of content, delivering more relevant results beyond simple keyword matching.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image" style="background-color: #F1C40F;">
+                        <i>K</i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Knowledge Management</h3>
+                        <p>Helps organizations structure their information assets, making knowledge discovery and retrieval more efficient within large document repositories.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image" style="background-color: #1ABC9C;">
+                        <i>A</i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">AI and ML</h3>
+                        <p>Provides structured data for training machine learning models, enabling more sophisticated natural language understanding and generation capabilities.</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-image" style="background-color: #E67E22;">
+                        <i>I</i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">Integration</h3>
+                        <p>Facilitates data integration across different systems and formats by providing standardized meaning and context to varied information sources.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="faq" class="section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What's the difference between tagging and semantic annotation?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>While tagging simply attaches keywords to content, semantic annotation provides context and relationship information. Tags are flat labels, whereas semantic annotations connect to structured knowledge bases and ontologies, creating a web of meaningful relationships between pieces of information.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What technologies are used for semantic annotation?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Common technologies include RDF (Resource Description Framework), OWL (Web Ontology Language), and various markup approaches like Microdata, RDFa, and JSON-LD. These technologies allow for the structured representation of annotated information that can be processed by machines.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can semantic annotation be automated?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, many aspects of semantic annotation can be automated using natural language processing (NLP) and machine learning techniques. Named entity recognition, relationship extraction, and concept identification can all be performed by AI systems, though human verification is often still valuable for ensuring accuracy and relevance.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How does semantic annotation relate to the Semantic Web?
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Semantic annotation is a fundamental building block of the Semantic Web vision. By annotating web content with machine-readable metadata, we create the "web of data" that enables computers to understand and process information more intelligently, moving beyond the document-centric web toward a data-centric web.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About Semantic Annotation</h3>
+                <p>Exploring the power of structured metadata to enhance digital content and enable the next generation of intelligent applications.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#types">Types</a></li>
+                    <li><a href="#demo">Demo</a></li>
+                    <li><a href="#applications">Applications</a></li>
+                    <li><a href="#faq">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">W3C Semantic Web</a></li>
+                    <li><a href="#">Schema.org</a></li>
+                    <li><a href="#">DBpedia</a></li>
+                    <li><a href="#">Linked Open Data</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2025 Semantic Annotation Explorer. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <a href="#" class="back-to-top">↑</a>
+    
+    <script>
+        $(document).ready(function() {
+            // Mobile navigation toggle
+            $('.hamburger').click(function() {
+                $('.nav-links').toggleClass('active');
+            });
+            
+            // FAQ accordion
+            $('.faq-question').click(function() {
+                $(this).next('.faq-answer').toggleClass('active');
+                const toggleIcon = $(this).find('.toggle-icon');
+                toggleIcon.text(toggleIcon.text() === '+' ? '-' : '+');
+            });
+            
+            // Back to top button
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 300) {
+                    $('.back-to-top').addClass('visible');
+                } else {
+                    $('.back-to-top').removeClass('visible');
+                }
+            });
+            
+            $('.back-to-top').click(function(e) {
+                e.preventDefault();
+                $('html, body').animate({scrollTop: 0}, 800);
+            });
+            
+            // Smooth scrolling for navigation
+            $('nav a').click(function(e) {
+                e.preventDefault();
+                const target = $($(this).attr('href'));
+                $('html, body').animate({
+                    scrollTop: target.offset().top - 70
+                }, 800);
+                $('.nav-links').removeClass('active');
+            });
+            
+            // Theme toggle
+            $('.theme-toggle').click(function() {
+                $('body').toggleClass('dark-theme');
+                $(this).text($('body').hasClass('dark-theme') ? 'Light Mode' : 'Dark Theme');
+            });
+            
+            // Create header particles
+            function createParticles() {
+                const particles = $('#particles');
+                for (let i = 0; i < 50; i++) {
+                    const size = Math.random() * 5 + 2;
+                    const particle = $('<div class="particle"></div>');
+                    particle.css({
+                        width: size + 'px',
+                        height: size + 'px',
+                        left: Math.random() * 100 + '%',
+                        top: Math.random() * 100 + '%',
+                        opacity: Math.random() * 0.5 + 0.1
+                    });
+                    particles.append(particle);
+                }
+                
+                // Animate particles
+                $('.particle').each(function() {
+                    animateParticle($(this));
+                });
+            }
+            
+            function animateParticle(particle) {
+                const speed = Math.random() * 15000 + 5000;
+                const startX = parseFloat(particle.css('left'));
+                const startY = parseFloat(particle.css('top'));
+                const endX = startX + (Math.random() * 100 - 50);
+                const endY = startY + (Math.random() * 100 - 50);
+                
+                particle.animate({
+                    left: endX + 'px',
+                    top: endY + 'px'
+                }, speed, function() {
+                    animateParticle(particle);
+                });
+            }
+            
+            createParticles();
+        });
+    </script>
+</body>
+</html>
